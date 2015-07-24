@@ -30,7 +30,8 @@ class DribbbleServiceProvider extends ServiceProvider {
 	{
 		$this->app['dribbble'] = $this->app->share(function($app)
 		{
-		  return new Dribbble;
+		  $config = $app['config']->get('dribbble::config');
+		  return new Dribbble($config);
 		});
 
 		$this->app->booting(function()
