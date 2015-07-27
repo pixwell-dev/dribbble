@@ -43,16 +43,48 @@ class Dribbble
     }
     
     /**
-     * Returns profile details for a player specified.
+     * Returns profile details for authenticated user/player.
      *
-     * @param  mixed   $id
-     * @return object
      */
     public function getUser(){
         return $this->request('user', null, 'GET');
     }
     
-
+    
+    /**
+	   * Returns projects for user/player, if no id is provided assumes authenticated user/player.
+	   *
+	   * @param int $per_page
+	   * @param int	$id
+	   * @return object
+	   */
+	  public function getUserProjects($per_page, $id = null){
+		  if($id){
+			  $user_projects_url = 'users/'.$id.'/projects';
+		  } else {
+			  $user_projects_url = 'user/projects';
+		  }
+		  return $this->request($user_projects_url,array(
+			  'per_page' => intval($per_page)
+		  ), 'GET');
+	  }
+		
+		/**
+		 * Returns the shots for a given project
+		 *
+		 * @param int $per_page
+		 * @param int $project_id
+		 * @return object
+		 */
+		public function getProjectShots($per_page = 50, $project_id){
+			if(!$project_id){
+				return false;
+			}
+			return $this->request('projects/'.$project_id.'/shots', array(
+				'per_page' => intval($per_page)
+			), 'GET');
+		}
+		
     /**
      * Build the url that your user 
      * 
